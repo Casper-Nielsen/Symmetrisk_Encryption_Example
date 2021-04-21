@@ -27,6 +27,11 @@ namespace Symmetrisk_Encryption_Example
             SelectAlgorithm(EncryptionTypeEnum.AES);
             GenerateSet(128);
         }
+
+        /// <summary>
+        /// Selects the right algorithem by looking at the enum
+        /// </summary>
+        /// <param name="algorithm">Tells what algorithm to use</param>
         public void SelectAlgorithm(EncryptionTypeEnum algorithm)
         {
             symmetric = algorithm switch
@@ -40,23 +45,30 @@ namespace Symmetrisk_Encryption_Example
             symmetric.Padding = PaddingMode.PKCS7;
             symmetric.Mode = CipherMode.CBC;
         }
+
+        /// <summary>
+        /// Generates the key and the iv
+        /// </summary>
+        /// <param name="keySize">The size of the key</param>
         public void GenerateSet(int keySize)
         {
             key = new byte[keySize / 8];
+            // Generates the iv in the right size
             symmetric.GenerateIV();
             iv = symmetric.IV;
+
+            // Generates the random key
             using(RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
             {
                 rng.GetBytes(key);
-                rng.GetBytes(iv);
             }
         }
 
         /// <summary>
-        /// encrypts the message with the selected encryption type
+        /// Encrypts the message with the selected encryption type
         /// </summary>
-        /// <param name="message">the message that will be encrypted</param>
-        /// <returns>the encrypted message</returns>
+        /// <param name="message">The message that will be encrypted</param>
+        /// <returns>The encrypted message</returns>
         public byte[] Encrypt(byte[] message)
         {
             // Create an encryptor to perform the stream transform.
@@ -77,8 +89,8 @@ namespace Symmetrisk_Encryption_Example
         /// <summary>
         /// Decrypts a message with the selected encryption type
         /// </summary>
-        /// <param name="encryptedMessage">the encrypted message that will be decrypted</param>
-        /// <returns>the decrypted message</returns>
+        /// <param name="encryptedMessage">The encrypted message that will be decrypted</param>
+        /// <returns>The decrypted message</returns>
         public byte[] Decrypt(byte[] encryptedMessage)
         {
             byte[] rawData = new byte[encryptedMessage.Length];

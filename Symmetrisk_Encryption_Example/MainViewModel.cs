@@ -131,7 +131,6 @@ namespace Symmetrisk_Encryption_Example
         /// <summary>
         /// Generates IV & Key in the right lenght
         /// </summary>
-        /// <param name="obj"></param>
         public void GenerateSet(object obj = null)
         {
             encryption.GenerateSet(SelectedEncryptionType.KeySize);
